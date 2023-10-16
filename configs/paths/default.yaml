@@ -1,0 +1,8 @@
+# output dir will be created by hydra
+#data_dir: C:\Users\thatf\OneDrive\Documents\Simulations\nu2flows\nu2flows_data # Example
+data_dir: C:\Users\thatf\OneDrive\Documents\Simulations\CMS Research\Full_Delphes # Delphes
+output_dir: ${oc.env:PROJECT_ROOT}
+
+# Interpolated
+root_dir: ${oc.env:PROJECT_ROOT}
+full_path: ${paths.output_dir}/${project_name}/${network_name}/

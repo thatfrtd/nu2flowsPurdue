@@ -1,0 +1,35 @@
+_target_: src.datamodules.dilepton.H5DataModule
+
+train_conf:
+  data_dir: ${paths.data_dir}
+  met_kins: px,py
+  lep_kins: px,py,pz,log_energy
+  jet_kins: px,py,pz,log_energy
+  nu_kins: px,py,pz
+  file_list:
+  - pythia_test_delph.h5
+  #- full_delphes_100_199.h5
+  #- full_delphes_200_299.h5
+  #- full_delphes_300_399.h5
+  #- full_delphes_400_499.h5
+  #- full_delphes_500_599.h5
+  #- full_delphes_600_699.h5
+
+test_conf:
+  data_dir: ${paths.data_dir}
+  met_kins: ${..train_conf.met_kins}
+  lep_kins: ${..train_conf.lep_kins}
+  jet_kins: ${..train_conf.jet_kins}
+  nu_kins: ${..train_conf.nu_kins}
+  file_list:
+  - pythia_test_delph.h5
+  #- full_delphes_800_899.h5
+  #- full_delphes_900_999.h5
+  #- test.h5
+
+loader_conf:
+  pin_memory: True
+  batch_size: 512
+  num_workers: 2
+
+val_frac: 0.1

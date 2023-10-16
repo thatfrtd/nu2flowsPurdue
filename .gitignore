@@ -1,0 +1,21 @@
+# Directories
+__pycache__
+data/
+logs/
+wandb/
+lightning_logs/
+nu2flows_models/
+outputs/
+.vscode/
+container/
+slurmscripts/
+logs/
+*mypy*
+
+# File types
+*.pyc
+*.ipynb
+*.out
+*.sh
+*.log
+*workspace
