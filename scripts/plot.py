@@ -16,7 +16,7 @@ from src.datamodules.physics import Mom4Vec
 from src.utils import read_dilepton_file
 
 # Paths to the relevant files
-data_file = "/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_data/full_delphes_0_99.h5"
+data_file = "/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_data/test.h5"#full_delphes_0_99.h5"
 model_file = root / "nu2flows_models/example_model/outputs/full_delphes_0_99.h5"
 plot_dir = root / "plots"
 
@@ -65,7 +65,7 @@ plot_multi_hists_2(
     hist_kwargs=[n.hist_kwargs for n in neutrino_list],
     err_kwargs=[n.err_kwargs for n in neutrino_list],
 )
-
+'''
 # Pull out the anti-lepton from the file data
 lep = file_data.leptons[:, 1:2]
 
@@ -90,3 +90,4 @@ plot_multi_hists_2(
     hist_kwargs=[n.hist_kwargs for n in neutrino_list],
     err_kwargs=[n.err_kwargs for n in neutrino_list],
 )
+'''

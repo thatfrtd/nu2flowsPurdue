@@ -1,0 +1,127 @@
+seed: 12345
+project_name: models
+network_name: example_model
+ckpt_path: checkpoints/best.ckpt
+precision: medium
+full_resume: true
+trainer:
+  _target_: pytorch_lightning.Trainer
+  min_epochs: 1
+  max_epochs: 1000
+  enable_progress_bar: true
+  accelerator: auto
+  devices: 1
+  precision: 32
+  check_val_every_n_epoch: 1
+  gradient_clip_val: 10
+  default_root_dir: ${paths.output_dir}
+model:
+  _target_: src.models.nuflows.TransNeutrinoFlow
+  prior_weight: 1.0e-05
+  part_embed_conf:
+    hddn_dim: 256
+    num_blocks: 1
+    nrm: layer
+  tve_conf:
+    model_dim: 128
+    num_sa_layers: 3
+    num_ca_layers: 2
+    mha_config:
+      num_heads: 8
+    dense_config:
+      hddn_dim: 256
+      num_blocks: 1
+      drp: 0.2
+      nrm: layer
+  embed_conf:
+    outp_dim: 32
+    hddn_dim: 64
+    num_blocks: 1
+    drp: 0.2
+    nrm: layer
+  flow_conf:
+    nstacks: 10
+    param_func: cplng
+    invrt_func: rqs
+    net_kwargs:
+      num_blocks: 2
+      hddn_dim: 128
+      nrm: layer
+      drp: 0.2
+    rqs_kwargs:
+      num_bins: 16
+      tail_bound: 4
+      tails: linear
+    do_lu: false
+    nrm: none
+  optimizer:
+    _target_: torch.optim.AdamW
+    _partial_: true
+    lr: 0.001
+    weight_decay: 0.0001
+  sched_conf:
+    utils:
+      name: cyclicwithwarmup
+      epochs_per_cycle: 70
+    lightning:
+      monitor: valid/total_loss
+      interval: step
+      frequency: 1
+datamodule:
+  _target_: src.datamodules.dilepton.H5DataModule
+  train_conf:
+    data_dir: ${paths.data_dir}
+    met_kins: px,py
+    lep_kins: px,py,pz,log_energy
+    jet_kins: px,py,pz,log_energy
+    nu_kins: px,py,pz
+    file_list:
+    - full_delphes_0_99.h5
+    - full_delphes_100_199.h5
+  test_conf:
+    data_dir: ${paths.data_dir}
+    met_kins: ${..train_conf.met_kins}
+    lep_kins: ${..train_conf.lep_kins}
+    jet_kins: ${..train_conf.jet_kins}
+    nu_kins: ${..train_conf.nu_kins}
+    file_list:
+    - full_delphes_700_799.h5
+    - full_delphes_800_899.h5
+    - full_delphes_900_999.h5
+  loader_conf:
+    pin_memory: true
+    batch_size: 512
+    num_workers: 2
+  val_frac: 0.1
+loggers:
+  wandb:
+    _target_: pytorch_lightning.loggers.wandb.WandbLogger
+    entity: mleigh
+    offline: false
+    id: null
+    log_model: false
+    project: ${project_name}
+    name: ${network_name}
+    save_dir: ${paths.full_path}
+paths:
+  data_dir: C:\Users\thatf\OneDrive\Documents\Simulations\CMS Research\Full_Delphes
+  output_dir: ${oc.env:PROJECT_ROOT}
+  root_dir: ${oc.env:PROJECT_ROOT}
+  full_path: ${paths.output_dir}/${project_name}/${network_name}/
+callbacks:
+  model_checkpoint:
+    _target_: pytorch_lightning.callbacks.ModelCheckpoint
+    dirpath: ${paths.full_path}/checkpoints
+    filename: best_{epoch:03d}
+    monitor: valid/total_loss
+    mode: min
+    save_last: true
+    auto_insert_metric_name: false
+  early_stopping:
+    _target_: pytorch_lightning.callbacks.EarlyStopping
+    monitor: valid/total_loss
+    mode: min
+    patience: 300
+  lr_monitor:
+    _target_: pytorch_lightning.callbacks.LearningRateMonitor
+    logging_interval: step

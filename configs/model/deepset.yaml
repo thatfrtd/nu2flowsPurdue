@@ -53,7 +53,7 @@ optimizer:
 sched_conf:
   utils:
     name: cyclicwithwarmup
-    epochs_per_cycle: 5
+    epochs_per_cycle: 70 #5 
   lightning:
     monitor: valid/total_loss
     interval: step

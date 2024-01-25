@@ -5,7 +5,9 @@ defaults:
   - _self_
 
 datasets:
- - full_delphes_0_99.h5
+ - full_delphes_700_799.h5
+ - full_delphes_800_899.h5
+ - full_delphes_900_999.h5
 
 # The name of the model to export
 network_name: example_model

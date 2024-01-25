@@ -98,7 +98,7 @@ def extract_and_process_predictions_h5py(h5py_file, prediction_file, output_file
     file_data = read_dilepton_file(Path(h5py_file))
 
     leptons = file_data.leptons
-    leptons = np.stack((leptons.pt, leptons.eta, leptons.phi, leptons.mass), -1).view([("pt", np.float32), ("eta", np.float32), ("phi", np.float32), ("M", np.float32)]).view(vector.MomentumNumpy4D)[..., 0]
+    leptons = np.stack((leptons.pt, leptons.eta, leptons.phi, leptons.mass), -1).view([("pt", np.float64), ("eta", np.float64), ("phi", np.float64), ("M", np.float64)]).view(vector.MomentumNumpy4D)[..., 0]
     leptons = leptons[..., 0].T
 
     jets = file_data.jets
@@ -248,4 +248,6 @@ def extract_and_process_predictions_h5py(h5py_file, prediction_file, output_file
 
 distribution_root_file = r"C:\Users\thatf\OneDrive\Documents\Simulations\CMS Research/KinReco_input.root"
 
-extract_and_process_predictions_h5py("/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_data/test.h5", "/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_models/example_model/outputs/test.h5", "testing", distribution_root_file)
+extract_and_process_predictions_h5py("/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_data/full_delphes_700_799.h5", "/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_models/example_model/outputs/full_delphes_700_799.h5", "example_model_full_delph_700_799", distribution_root_file)
+extract_and_process_predictions_h5py("/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_data/full_delphes_800_899.h5", "/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_models/example_model/outputs/full_delphes_800_899.h5", "example_model_full_delph_800_899", distribution_root_file)
+extract_and_process_predictions_h5py("/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_data/full_delphes_900_999.h5", "/Users/thatf/OneDrive/Documents/Simulations/nu2flows/nu2flows_models/example_model/outputs/full_delphes_900_999.h5", "example_model_full_delph_900_999", distribution_root_file)
